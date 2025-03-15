@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -22,6 +24,7 @@ public class ChatA implements ActionListener{
     private JButton jb;
     private ChatB CB;
     private List<String> chatHistory;
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
 
     public ChatA(List<String> chatHistory){
         this.chatHistory = chatHistory;
@@ -72,16 +75,13 @@ public class ChatA implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(jb)) {
-            chatHistory.add("A: " + jtf.getText()); // Add message to shared history
+            chatHistory.add("["+LocalDateTime.now().format(formatter) +"]"+"A: " + jtf.getText()); // Add message to shared history
             updateChat(); // Refresh chat history
             CB.updateChat(); // Notify ChatB to refresh
             jtf.setText("");
         }
     }
     public void updateChat() {
-        jta.setText(""); // Clear and reload chat
-        for (String message : chatHistory) {
-            jta.append(message + "\n");
-        }
+        jta.setText(String.join("\n", chatHistory));
     }
 }

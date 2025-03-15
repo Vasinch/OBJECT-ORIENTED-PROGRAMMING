@@ -7,6 +7,8 @@ package lab14;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -21,6 +23,7 @@ public class ChatB implements ActionListener {
     private JButton jb;
     private ChatA CA;
     private List<String> chatHistory;
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
     
     public ChatB(ChatA A,List<String> chatHistory){
         this.chatHistory = chatHistory;
@@ -29,7 +32,7 @@ public class ChatB implements ActionListener {
         jp1 = new JPanel();
         jp2 = new JPanel();
         jtab = new JTextArea(10,40);
-        jtfb = new JTextField(40);
+        jtfb = new JTextField(35);
         jb = new JButton("send");
         jb.addActionListener(this);
         jtab.setEditable(false);
@@ -60,7 +63,7 @@ public class ChatB implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(jb)) {
-            chatHistory.add("B: " + jtfb.getText()); // Add message to shared history
+            chatHistory.add("["+LocalDateTime.now().format(formatter) +"]"+"B: " + jtfb.getText()); // Add message to shared history
             updateChat(); // Refresh chat history
             CA.updateChat(); // Notify ChatA to refresh
             jtfb.setText("");
@@ -68,9 +71,6 @@ public class ChatB implements ActionListener {
     }
     
     public void updateChat() {
-        jtab.setText(""); // Clear and reload chat
-        for (String message : chatHistory) {
-            jtab.append(message + "\n");
+        jtab.setText(String.join("\n", chatHistory));
         }
     }
-}
