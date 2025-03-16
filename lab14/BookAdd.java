@@ -68,10 +68,13 @@ public class BookAdd {
             }
             list.add(new Book(name, price, type));
             bookView.showList(list.size() - 1);
+            bookView.updateIndexField();
             JOptionPane.showMessageDialog(jf, "Done it.");
             jf.dispose();
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(jf, "Invalid price format!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+
 }

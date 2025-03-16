@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class BookView implements WindowListener, Serializable {
-    private ArrayList<Book> list;
+    private ArrayList<Book> list = new ArrayList<>();
     private JFrame jf;
     private JPanel jp1,jp2,jp3,jp4,jp5;
     private JLabel jln,jlp,jlt;
@@ -106,29 +106,44 @@ public class BookView implements WindowListener, Serializable {
 
     private void updateBook() {
         int index = getIndex();
-        if (index >= 0 && index < list.size()) {
-                double price = Double.parseDouble(jtf2.getText().trim());
-                list.set(index, new Book(jtf1.getText(), price, jcb.getSelectedItem().toString()));
-                showList(index);
-                JOptionPane.showMessageDialog(jf, "Done it.");
+        if (index < 0 || index >= list.size()) return;
+
+        try {
+            double price = Double.parseDouble(jtf2.getText().trim());
+            list.set(index, new Book(jtf1.getText(), price, jcb.getSelectedItem().toString()));
+            showList(index);
+            JOptionPane.showMessageDialog(jf, "Done it.");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(jf, "Invalid price format!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void deleteBook() {
         int index = getIndex();
-        if (index >= 0 && index < list.size()) {
-            list.remove(index);
+        if (index < 0 || index >= list.size()) return;
+
+        list.remove(index);
+        if (!list.isEmpty()) {
             showList(Math.max(0, index - 1));
-            JOptionPane.showMessageDialog(jf, "Done it.");
+        } else {
+            resetUI();
         }
+        JOptionPane.showMessageDialog(jf, "Done it.");
     }
 
+    private void resetUI() {
+        jtf1.setText("");
+        jtf2.setText("");
+        jcb.setSelectedIndex(0);
+        jtf0.setText("");
+    }
+    
     private void loadData() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("Book.data"))) {
             list = (ArrayList<Book>) in.readObject();
             if (!list.isEmpty()) showList(0);
         } catch (Exception e) {
-            list = new ArrayList<>();
+            if (list == null) list = new ArrayList<>();
         }
     }
 
@@ -150,5 +165,13 @@ public class BookView implements WindowListener, Serializable {
 
     public static void main(String[] args) {
         new BookView();
+    }
+
+    public void updateIndexField() {
+        if (list.isEmpty()) {
+            jtf0.setText("0");
+        } else {
+            jtf0.setText(String.valueOf(list.size()));
+        }
     }
 }
