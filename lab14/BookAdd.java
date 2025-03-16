@@ -17,7 +17,6 @@ public class BookAdd {
         jln = new JLabel(" name");
         jlp = new JLabel(" price");
         jlt = new JLabel(" Type");
-        jcb = new JComboBox<>();
         jtf1 = new JTextField(10);
         jtf2 = new JTextField(10);
         jb = new JButton("Insert");
@@ -27,8 +26,6 @@ public class BookAdd {
         jcb.addItem("Computer");
         jcb.addItem("Math&Sci");
         jcb.addItem("Photo3");
-
-        jb.addActionListener(e -> addBook(list, bookView));
 
         jp1 = new JPanel();
         jp2 = new JPanel();
