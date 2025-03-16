@@ -27,8 +27,6 @@ public class BookAdd {
         jcb.addItem("Computer");
         jcb.addItem("Math&Sci");
         jcb.addItem("Photo3");
-        jtf1.setEditable(false);
-        jtf2.setEditable(false);
 
         jb.addActionListener(e -> addBook(list, bookView));
 
